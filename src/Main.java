@@ -3,116 +3,90 @@
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        //Журнал логов через StringBuilder
-        StringBuilder log = new StringBuilder();
-
         // Директории
-        File src = new File("Games/src");
-        File res = new File("Games/res");
-        File saveGames = new File("Games/savegames");
-        File temp = new File("Games/temp");
+        ArrayList<String> directory = new ArrayList<>();
+        directory.add("Games/temp");
+        directory.add("Games/src");
+        directory.add("Games/res");
+        directory.add("Games/savegames");
 
-        File main = new File("Games/src/main");
-        File test = new File("Games/src/test");
+        ArrayList<String> directorySrc = new ArrayList<>();
+        directorySrc.add("Games/src/main");
+        directorySrc.add("Games/src/test");
 
-        File drawables = new File("Games/res/drawables");
-        File vectors = new File("Games/res/vectors");
-        File icons = new File("Games/res/icons");
+        ArrayList<String> directoryRes = new ArrayList<>();
+        directoryRes.add("Games/res/drawables");
+        directoryRes.add("Games/res/vectors");
+        directoryRes.add("Games/res/icons");
 
-        if (src.mkdir())
-            log.append(src + ": директория создана\n");
-        else
-            log.append(src + ": ошибка при создани директории\n");
-        if (res.mkdir())
-            log.append(res + ": директория создана\n");
-        else
-            log.append(res + ": ошибка при создани директории\n");
-        if (saveGames.mkdir())
-            log.append(saveGames + ": директория создана\n");
-        else
-            log.append(saveGames + ": ошибка при создани директории\n");
+        for (String dir:directory) {
+            setupGamesDir(dir);
+        }
 
-        if (temp.mkdir())
-            log.append(temp + ": директория создана\n");
-        else
-            log.append(temp + ": ошибка при создани директории\n");
+        for (String dir:directorySrc) {
+            setupGamesDir(dir);
+        }
 
-        if (main.mkdir())
-            log.append(main + ": директория создана\n");
-        else
-            log.append(main + ": ошибка при создани директории\n");
-        if (test.mkdir())
-            log.append(test + ": директория создана\n");
-        else
-            log.append(test + ": ошибка при создани директории\n");
-
-        if(drawables.mkdir())
-            log.append(drawables + ": директория создана\n");
-        else
-            log.append(drawables + ": ошибка при создани директории\n");
-        if(vectors.mkdir())
-            log.append(vectors + ": директория создана\n");
-        else
-            log.append(vectors + ": ошибка при создани директории\n");
-        if(icons.mkdir())
-            log.append(icons + ": директория создана\n");
-        else
-            log.append(icons + ": ошибка при создани директории\n");
-
-
+        for (String dir:directoryRes) {
+            setupGamesDir(dir);
+        }
         // Файлы
-        File mainJava = new File(main, "Main.java");
-        File utilsJava = new File(main, "Utils.java");
+        ArrayList<String> filesMain = new ArrayList<>();
+        filesMain.add("Main.java");
+        filesMain.add("Utils.java");
 
-        File tempTxt = new File(temp, "temp.txt");
-
-        try {
-            if( mainJava.createNewFile())
-                log.append(mainJava + ": файл создан\n");
-            else
-                System.out.println(mainJava + ": файл не создан\n");
-        } catch (IOException e) {
-            System.out.println(mainJava + ": ошибка при создании файла\n");
-            throw new RuntimeException(e);
+        for (String file: filesMain) {
+            setupGamesFile("Games/src/main", file);
         }
-        try {
-            if( utilsJava.createNewFile())
-                log.append(utilsJava + ": файл создан\n");
-            else
-                System.out.println(utilsJava + ": файл не создан\n");
-        } catch (IOException e) {
-            System.out.println(utilsJava + ": ошибка при создании файла\n");
-            throw new RuntimeException(e);
-        }
-
-        try {
-            if( tempTxt.createNewFile())
-                log.append(tempTxt + ": файл создан\n");
-            else
-                System.out.println(tempTxt + ": файл не создан\n");
-        } catch (IOException e) {
-            System.out.println(tempTxt + ": ошибка при создании \n");
-            throw new RuntimeException(e);
-        }
-
-        //Журнал логов. Пишем в файл
-        String result = log.toString();
-
-        try (FileOutputStream fos = new FileOutputStream(tempTxt)) {
-            // перевод строки в массив байтов
-            byte[] bytes = result.getBytes();
-            // запись байтов в файл
-            fos.write(bytes, 0, bytes.length);
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-        }
+        //setupGamesFile("Games/temp", "temp.txt");
 
         System.out.println("Процесс установки завершен");
 
     }
+
+    public static void setupGamesDir(String dir) {
+
+        //Журнал логов через StringBuilder
+        StringBuilder log = new StringBuilder();
+
+        File setup = new File(dir);
+
+        if (setup.mkdir())
+            log.append(setup + ": директория создана\n");
+        else
+            log.append(setup + ": ошибка при создани директории\n");
+
+        log(log.toString());
+    }
+
+    public static void log(String log) {
+        try (FileOutputStream fos = new FileOutputStream("C:/Users/filyuzin/IdeaProjects/netology_core_ser_1/Games/temp/temp.txt", true)) {
+            fos.write(log.getBytes());
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    public static void setupGamesFile(String dir, String file) {
+
+        File mainJava = new File(dir, file);
+
+        try {
+            if (mainJava.createNewFile())
+                log(mainJava + ": файл создан\n");
+            else
+                log(mainJava + ": файл не создан\n");
+        } catch (IOException e) {
+            log(mainJava + ": ошибка при создании файла\n");
+            throw new RuntimeException(e);
+        }
+
+    }
+
 }
