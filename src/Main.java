@@ -66,8 +66,7 @@ public class Main {
     }
 
     public static void log(String log) {
-        //относительный: try (FileOutputStream fos = new FileOutputStream("/Games/temp/temp.txt", true)) {
-        try (FileOutputStream fos = new FileOutputStream("C:/Users/filyuzin/IdeaProjects/netology_core_ser_1/Games/temp/temp.txt", true)) {
+        try (FileOutputStream fos = new FileOutputStream("Games/temp/temp.txt", true)) {
             fos.write(log.getBytes());
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
